@@ -1,0 +1,128 @@
+section .data
+    ; Message to prompt the user to enter a number
+    prompt db 'Enter number: ', 0
+    ; Message to display the sum
+    result db 'The sum is: ', 0
+    ; Newline characters for formatting
+    crlf   db 0x0D, 0x0A, 0
+
+section .text
+    global _start
+
+_start:
+    ; Prompt the user to enter the first number
+    mov     rax, 1          ; syscall number for printing
+    mov     rdi, 1          ; file descriptor for printing (stdout)
+    mov     rsi, prompt     ; address of the prompt message
+    mov     rdx, 14         ; length of the prompt message
+    syscall                 ; display the prompt message
+
+    ; Input the first number
+    mov     rax, 0          ; syscall number for reading
+    mov     rsi, 0          ; no prompt message
+    mov     rdi, 0          ; file descriptor for reading (stdin)
+    syscall                 ; read the first number
+    mov     r8, rax         ; store the first number
+
+    ; Prompt the user to enter the second number
+    mov     rax, 1          ; syscall number for printing
+    mov     rdi, 1          ; file descriptor for printing (stdout)
+    mov     rsi, prompt     ; address of the prompt message
+    mov     rdx, 14         ; length of the prompt message
+    syscall                 ; display the prompt message
+
+    ; Input the second number
+    mov     rax, 0          ; syscall number for reading
+    mov     rsi, 0          ; no prompt message
+    mov     rdi, 0          ; file descriptor for reading (stdin)
+    syscall                 ; read the second number
+    add     r8, rax         ; add the second number to the first number
+
+    ; Display the result message
+    mov     rax, 1          ; syscall number for printing
+    mov     rdi, 1          ; file descriptor for printing (stdout)
+    mov     rsi, result     ; address of the result message
+    mov     rdx, 12         ; length of the result message
+    syscall                 ; display the result message
+
+    ; Display the sum
+    mov     rax, 1          ; syscall number for printing
+    mov     rdi, 1          ; file descriptor for printing (stdout)
+    mov     rsi, r8         ; number to print
+    mov     rdx, 10         ; length of the number
+    syscall                 ; print the sum
+
+    ; Print a newline
+    call    newLine
+
+    ; Prompt the user to enter the first number for Adder2 subroutine
+    mov     rax, 1          ; syscall number for printing
+    mov     rdi, 1          ; file descriptor for printing (stdout)
+    mov     rsi, prompt     ; address of the prompt message
+    mov     rdx, 14         ; length of the prompt message
+    syscall                 ; display the prompt message
+
+    ; Input the first number for Adder2 subroutine
+    mov     rax, 0          ; syscall number for reading
+    mov     rsi, 0          ; no prompt message
+    mov     rdi, 0          ; file descriptor for reading (stdin)
+    syscall                 ; read the first number for Adder2 subroutine
+    push    rax             ; push the first number onto the stack
+
+    ; Prompt the user to enter the second number for Adder2 subroutine
+    mov     rax, 1          ; syscall number for printing
+    mov     rdi, 1          ; file descriptor for printing (stdout)
+    mov     rsi, prompt     ; address of the prompt message
+    mov     rdx, 14         ; length of the prompt message
+    syscall                 ; display the prompt message
+
+    ; Input the second number for Adder2 subroutine
+    mov     rax, 0          ; syscall number for reading
+    mov     rsi, 0          ; no prompt message
+    mov     rdi, 0          ; file descriptor for reading (stdin)
+    syscall                 ; read the second number for Adder2 subroutine
+    push    rax             ; push the second number onto the stack
+    push    0               ; make room for sum on the stack
+
+    ; Call the Adder2 subroutine
+    call    Adder2
+
+    ; Display the result message for Adder2 subroutine
+    mov     rax, 1          ; syscall number for printing
+    mov     rdi, 1          ; file descriptor for printing (stdout)
+    mov     rsi, result     ; address of the result message
+    mov     rdx, 12         ; length of the result message
+    syscall                 ; display the result message
+
+    ; Display the sum for Adder2 subroutine
+    pop     rax             ; pop the sum from the stack
+    mov     rdi, rax        ; number to print
+    mov     rax, 1          ; syscall number for printing
+    mov     rsi, rdi        ; number to print
+    mov     rdx, 10         ; length of the number
+    syscall                 ; print the sum
+
+    ; Print a newline after Adder2 subroutine result
+    call    newLine
+
+    ; Stop program execution
+    mov     rax, 60         ; syscall number for exit
+    xor     rdi, rdi        ; exit code 0
+    syscall                 ; exit the program
+
+; Adder2 subroutine to add two numbers
+Adder2:
+    pop     rbx             ; pop the second number from the stack
+    pop     rax             ; pop the first number from the stack
+    add     rax, rbx        ; add the first and second numbers
+    push    rax             ; push the sum onto the stack
+    ret
+
+; newLine subroutine to print a newline
+newLine:
+    mov     rax, 1          ; syscall number for printing
+    mov     rdi, 1          ; file descriptor for printing (stdout)
+    mov     rsi, crlf       ; address of the newline characters
+    mov     rdx, 2          ; length of the newline characters
+    syscall                 ; print the newline characters
+    ret                     ; return from the subroutine
