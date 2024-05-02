@@ -1,0 +1,24 @@
+README Text:
+This assembly program called 'project2.asm'. The project is designed to make the user interact with prompts asking them to input two numbers,
+With the numbers getting added together and printing the sum to the user.
+
+INPUT PROMPTING: The program starts by displaying the message asking the user to enter a number to prompt the user to input the first number
+where the user can input any number the user likes, After inputing the user gets asked to input a second number.
+
+ADDITION: Upon recieving the two numbers the program adds them together using simple arithmetic operations.
+
+Output Display: The code prints The sum is but, I couldn't manage to get the output of the 2 numbers to print for both instances
+and I have no clue where I went wrong with this.
+
+Subroutine Usage: Additionally, the program demonstrates the utilization of a subroutine named 'Adder 2'. This subroutine takes another 2 
+numbers and adds them together but yet again I wasn't able to print the sum of the 2 numbers.
+
+NEWLINE FORMATTING: To enhance readability, the program includes characters after each displayed result.
+
+NORMAL TERMINATION: Finally the program gracefully terminates after completing its task.
+
+To assemble and run the program I followed these steps:
+nasm -f elf64 project2.asm -o project2.o
+ld project2.o -o project2
+./project2
+
